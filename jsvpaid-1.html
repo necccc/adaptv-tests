@@ -46,7 +46,7 @@
          */
         var environmentVars = {
             maxWrapperLevels : 5,
-            clickSlot        : document.getElementById('clicktracker'), // optional
+         //   clickSlot        : document.getElementById('clicktracker'), // optional
             videoSlot        : document.getElementById('content'), // Required
             slot             : document.getElementById('adslot') // Required
             // companionSlots   : []
@@ -96,8 +96,8 @@
 
         // construct the adTag, and put in as creativeData
         creativeData = {};
-        //creativeData.adTagUrl = __adaptv__.vpaid.constructAdTag(url, params, customParams);
-        creativeData.adTagUrl = "http://ads.adap.tv/a/t/ustreamtv?pageUrl=http%3A%2F%2Fwww.ustream.tv%2Frecorded%2F45590221&id=4328435&title=WORLD%20OF%20HUMMINGBIRDS!%20(Emma's%20Nest)&description=WORLD%20OF%20HUMMINGBIRDS!%20(Emma's%20Nest)&duration=886.554&categories=95-101&keywords=WORLD%20OF%20HUMMINGBIRDS!%20(Emma's%20Nest)&url=http%3A%2F%2Fwww.ustream.tv%2Fembed%2Ftest&zid=rec5pre&ctx.language=en-US&ctx.locale=hu_HU&ctx.vid=45590221&pet=preroll&creativeType=vast_video&cb=50&a.sdk=adaptv&a.sdkType=js&a.vpaid=0";
+        creativeData.adTagUrl = __adaptv__.vpaid.constructAdTag(url, params, customParams);
+        //creativeData.adTagUrl = "http://ads.adap.tv/a/t/ustreamtv?pageUrl=http%3A%2F%2Fwww.ustream.tv%2Frecorded%2F45590221&id=4328435&title=WORLD%20OF%20HUMMINGBIRDS!%20(Emma's%20Nest)&description=WORLD%20OF%20HUMMINGBIRDS!%20(Emma's%20Nest)&duration=886.554&categories=95-101&keywords=WORLD%20OF%20HUMMINGBIRDS!%20(Emma's%20Nest)&url=http%3A%2F%2Fwww.ustream.tv%2Fembed%2Ftest&zid=rec5pre&ctx.language=en-US&ctx.locale=hu_HU&ctx.vid=45590221&pet=preroll&creativeType=vast_video&cb=50&a.sdk=adaptv&a.sdkType=js&a.vpaid=0";
 
         /**
          * adTagUrl is used in cases where you have a specific ad tag you want to call.
