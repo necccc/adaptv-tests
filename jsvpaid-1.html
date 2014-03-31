@@ -136,6 +136,7 @@
             // adaptvVPAIDAd.startAd();
         });
         adaptvVPAIDAd.subscribe('AdStarted', function(e) { console.log('Ad Started'); isPlaying = true; });
+        adaptvVPAIDAd.subscribe('AdClickThru', function(e) { console.log('Ad ClickThru'); adaptvVPAIDAd.pauseAd(); });
         adaptvVPAIDAd.subscribe('AdPaused', function(e) { console.log('Ad Paused'); isPlaying = false; });
         adaptvVPAIDAd.subscribe('AdStopped', function() { console.log('Ad Stopped.'); });
         adaptvVPAIDAd.subscribe('AdError', function(e) { console.log(e.type + '! Error code: ' + e.data.errorCode + '. Error message: ' + e.data.errorMessage)} );
