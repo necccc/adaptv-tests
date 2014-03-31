@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sample HTML5 player</title>
+<meta name = "viewport" content = "initial-scale = 1.0">
+<script type="text/javascript" src="http://redir.adap.tv/redir/javascript/jsvpaid.js"></script>
+<script type="text/javascript">
+    /**
+     * Using onload attribute for example, but vast-min.js can be loaded and
+     * __adaptv__.vpaid.VPAIDAd object can be created on-the-fly or based off of some other event.
+     * In fact, the implementation can even be served up by some other display ad server
+     * or CMS, if desired.
+     */
+
+    var onBodyLoad = function() {
+        /**
+         * SDK environmentVars. The below environmentVars are all that are available currently.
+         */
+
+        /*
+         * Limitations of sizing and autoplay on iOS can be found here:
+         * http://developer.apple.com/library/safari/#documentation/AudioVideo/Conceptual/Using_HTML5_Audio_Video/Device-SpecificConsiderations/Device-SpecificConsiderations.html#//apple_ref/doc/uid/TP40009523-CH5-SW1
+         */
+
+        /*
+         * Requirements for the Adaptv JS SDK
+         * - A container around Slot and Videoslot
+         *   - This element must be position: relative;
+         * - Slot(div) & VideoSlot(video) in env
+         *   - Video slot is an html5 video element that will start after the ad is played.
+         *   - Slot is a div element that comes after the video slot, it is used by the SDK to show the ad and it's elements
+         *   - Both of these elements must be positioned absolute
+         *
+         * An example of this is shown below in the body of this html document.  The styling is inlined in the head.
+         *
+         * maxWrapperLevels : Maximum number of VAST wrapper redirects; default is 5
+         * videoSlot        : Set this to point to your video player that plays content post ad
+         * slot             : Set this to the div slot where the ad will be shown
+         * clickSlot        : Set this if want to have a clickthrough slot that is not the video.  This is useful because mobile(ios/android) will pass clicks through to the player.  This will puase the ad but not resume
+         * companionSlots   : Set this for showing companions
+         *
+         * NOTES FOR IOS:
+         * - The adaptv SDK will take care of reusing your video element on iphones/ipods.  No custom code is needed.
+         */
+        var environmentVars = {
+            maxWrapperLevels : 5,
+            videoSlot        : document.getElementById('content'), // Required
+            slot             : document.getElementById('adslot'), // Required
+            clickSlot        : document.getElementById('clicktracker') // optional
+            // companionSlots   : []
+        };
+
+        /**
+         * Adap.tv provided unique publisher key. It can be used to construct your Adap.tv ad-tag
+         */
+        var url = "http://ads.adap.tv/a/t/keithsandbox";
+
+        /**
+         * ad-tag downloaded from Adap.tv console can also be used.
+         */
+        // var url = "http://ads.adap.tv/a/h/TtQ9XavXjOwhlfKSsgM4oPzFXKwYrMRqEUti6lPUIdE=?&pageUrl=EMBEDDING_PAGE_URL&description=VIDEO_DESCRIPTION&duration=VIDEO_DURATION&id=VIDEO_ID&keywords=VIDEO_KEYWORDS&title=VIDEO_TITLE&url=VIDEO_URL&eov=eov"
+
+
+        /**
+         * Holds all targeting, custom, and meta data to construct the adaptv ad-tag
+         */
+        var params = {};
+
+        /**
+         * Page URL, either full URL or just domain.com.
+         */
+        params.pageUrl = "http://www.mefeedia.com/";
+
+        /**
+         * Below is a complete list of Adap.tv native keys to send targeting and meta data,
+         * along with placeholders.
+         */
+        params.id = "[VIDEO_ID]";                   // Video id
+        params.title = "[VIDEO_TITLE]";             // Video title
+        params.description = "[VIDEO_DESCRPTION]";  // Video description
+        params.duration = "[VIDEO_DURATION]";       // Video duration
+        // params.keywords = "[VIDEO_KEYWORDS]";       // Video keywords, comma-separated
+        params.keywords = "ios6";                   // dummy example value
+        params.categories = "[CATEGORIES]";         // Categories, comma-separated
+
+        /**
+         * Holds all custom keys defined in the Adap.tv console. Corresponds to the "context"
+         * parameter in the AS3 API integration. Below are dummy example values.
+         */
+        var customParams = {};
+        customParams.key1 = "value1";
+        customParams.key2 = "value2";
+        customParams.testkey1 = "ios_ri";
+
+        // construct the adTag, and put in as creativeData
+        creativeData = {};
+        creativeData.adTagUrl = __adaptv__.vpaid.constructAdTag(url, params, customParams);
+
+        /**
+         * adTagUrl is used in cases where you have a specific ad tag you want to call.
+         * If you wish to use the constructAdTag integration instead, please leave
+         * commented out.
+         */
+        // creativeData.adTagUrl = "<AD_TAG_URL>";
+
+        // variable to keep track of player state
+        var isPlaying = false;
+
+        // new VPAIDAd
+        adaptvVPAIDAd = new __adaptv__.vpaid.VPAIDAd();
+
+        /**
+         * events
+         * We support a VPAID like interface, the events can be found at __adaptv__.vpaid.VPAIDEvent
+         * AdLoaded: The event is sent by the ad to notify that the ad has finished any loading of assets and is ready for display.
+         * AdStarted: The event is sent by the ad to notify that the ad is displaying.
+         * AdStopped: The event is sent by the ad to notify that the ad has stopped displaying, and all ad resources have been cleaned up.
+         * AdImpression: The event is used to notify that the user-visible phase of the ad has begun.
+         * AdVideoStart, AdVideoFirstQuartile, AdVideoMidpoint, AdVideoThirdQuartile, AdVideoComplete: These five events are sent by the ad to notify the ad’s video progress.
+         * AdClickThru: The event is sent by the ad when a click thru on the click thru oject after video ad occurs.
+         * AdPaused, AdPlaying: These events are sent by the ad to notify the pause/resume status change of the ad's video.
+         * AdError: The event is sent when the ad has experienced a fatal error.
+         */
+
+        /**
+         * add listeners to subscribe events
+         * event object contains 'type' property, and AdError event contains 'data' property with error code and error message.
+         * below is a simple example of adding listeners
+         */
+        adaptvVPAIDAd.subscribe('AdLoaded', function() {
+            console.log('Ad Loaded');
+            // This is commented out because autostart is not supported on mobile devices and must be started via a user action(click)
+            // adaptvVPAIDAd.startAd();
+        });
+        adaptvVPAIDAd.subscribe('AdStarted', function(e) { console.log('Ad Started'); isPlaying = true; });
+        adaptvVPAIDAd.subscribe('AdPaused', function(e) { console.log('Ad Paused'); isPlaying = false; });
+        adaptvVPAIDAd.subscribe('AdStopped', function() { console.log('Ad Stopped.'); });
+        adaptvVPAIDAd.subscribe('AdError', function(e) { console.log(e.type + '! Error code: ' + e.data.errorCode + '. Error message: ' + e.data.errorMessage)} );
+
+        /**
+         * Initiate video ad call
+         * Base on VPAID standard, the ad does not attempt to load assets until init method is called.
+         * initAd(width : Number, height : Number, viewMode : String, desiredBitrate : Number, creativeData : Object, environmentVars : Object) : void
+         * currently we do not support viewMode and desiredBitrate, pass in some dummy number
+         */
+        adaptvVPAIDAd.initAd(640, 360, -1, -1, creativeData, environmentVars);
+
+        /**
+         * start video ad playback
+         * Base on VPAID standard, startAd is called by the player and is called when the player wants the ad to start displaying. The ad does not attempt to start until the start method is called.
+         * Example of auto start, add the following line before initAd call:
+         * adaptvVPAIDAd.subscribe('AdLoaded', function() {adaptvVPAIDAd.startAd();});
+         */
+        // adaptvVPAIDAd.startAd();
+
+        /**
+         * pause/resume video ad
+         * AdPaused/AdPlaying events will be dispatched accordingly.
+         */
+        // adaptvVPAIDAd.pauseAd();
+        // adaptvVPAIDAd.resumeAd();
+
+        /**
+         * stop ad
+         * stopAd call will stop the ad and clean up.
+         * AdStopped will be dispatched once everything is finished.
+         */
+        // adaptvVPAIDAd.stopAd();
+
+        /**
+         * video ad volume
+         * getAdVolume call can be used to get the current volume of the video ad once the ad started
+         * setAdVolume call can be used to programitically set the volume of the ad once the ad started, the volume is a number within [0, 1]
+         */
+        // console.log('Ad volume: ' + adaptvVPAIDAd.getAdVolume());
+        // adaptvVPAIDAd.setAdVolume(0.5);
+
+        /**
+         * remaining time of video ad
+         * getAdRemainingTime call can be used to get the current remaining time of the video ad ocne the ad is loaded.
+         */
+        // console.log('Ad has ' + adaptvVPAIDAd.getAdRemainingTime() + ' secs left.);
+
+        /*
+         * basic implementation of resume/play button
+         */
+        var videoControl = document.getElementById('control');
+        videoControl.addEventListener('click', function(e) {
+            isPlaying ? adaptvVPAIDAd.pauseAd() : adaptvVPAIDAd.resumeAd();
+            isPlaying = !isPlaying;
+        });
+    }
+
+</script>
+<style>
+    #container {
+        margin: 0 auto;
+        width: 640px;
+        position: relative;
+    }
+    #container {
+        width: 640px;
+        height: 360px;
+        position: relative;
+    }
+    #content {
+        width: 640px;
+        height: 360px;
+        position: absolute;
+    }
+    #adslot {
+        position: absolute;
+    }
+    #clicktracker {
+        text-align: center;
+        background: #BBB;
+        vertical-align: 100px;
+        line-height: 100px;
+        text-align: middle;
+        height: 100px;
+        width: 480px;
+        margin: 0px auto;
+    }
+    #control {
+        text-align: center;
+        background: green;
+        vertical-align: 100px;
+        line-height: 100px;
+        text-align: middle;
+        height: 100px;
+        width: 480px;
+        margin: 0px auto;
+    }
+</style>
+</head>
+
+<body onload="onBodyLoad()">
+<div id="wrapper">
+    <div id="container">
+        <video id="content">
+            <source src="http://dev.adap.tv/Jason/DosEquisItalianCountryside.mp4"></source>
+        </video>
+        <div id="adslot">
+            </slot>
+        </div>
+    </div>
+    <div id="control">Play/Pause</div>
+    <div id="clicktracker">clickslot</div>
+</body>
+</html>
