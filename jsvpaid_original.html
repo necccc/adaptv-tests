@@ -130,14 +130,14 @@
                 * below is a simple example of adding listeners
                 */
                 adaptvVPAIDAd.subscribe('AdLoaded', function() {
-                    log('Ad Loaded');
+                    __log('Ad Loaded');
                     // This is commented out because autostart is not supported on mobile devices and must be started via a user action(click)
                     // adaptvVPAIDAd.startAd();
                 });
-                adaptvVPAIDAd.subscribe('AdStarted', function(e) { log('Ad Started'); isPlaying = true; });
-                adaptvVPAIDAd.subscribe('AdPaused', function(e) { log('Ad Paused'); isPlaying = false; });
-                adaptvVPAIDAd.subscribe('AdStopped', function() { log('Ad Stopped.'); });
-                adaptvVPAIDAd.subscribe('AdError', function(e) { log(e.type + '! Error code: ' + e.data.errorCode + '. Error message: ' + e.data.errorMessage)} );
+                adaptvVPAIDAd.subscribe('AdStarted', function(e) { __log('Ad Started'); isPlaying = true; });
+                adaptvVPAIDAd.subscribe('AdPaused', function(e) { __log('Ad Paused'); isPlaying = false; });
+                adaptvVPAIDAd.subscribe('AdStopped', function() { __log('Ad Stopped.'); });
+                adaptvVPAIDAd.subscribe('AdError', function(e) { __log(e.type + '! Error code: ' + e.data.errorCode + '. Error message: ' + e.data.errorMessage)} );
 
                 /**
                 * Initiate video ad call
