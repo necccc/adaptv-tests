@@ -44,6 +44,8 @@
                  */
                 var environmentVars = {
                     maxWrapperLevels : 5,
+                    adTagTimeout        : 200,
+                    videoTimeout        : 200,
                     videoSlot        : document.getElementById('content'), // Required
                     slot             : document.getElementById('adslot'), // Required
                     clickSlot        : document.getElementById('clicktracker') // optional
@@ -231,13 +233,18 @@
                 width: 480px;
                 margin: 0px auto;
             }
+
+
+            #ADAPTV_HTML5_IFRAME {
+                border: 3px solid red !important;
+            }
         </style>
     </head>
 
     <body onload="onBodyLoad()">
         <div id="wrapper">
             <div id="container">
-                <video id="content">
+                <video id="content" controls="true"  poster="http://automotor.hu/lapokkepek/cikkek/213000/213556_911index.jpg">
                     <source src="http://dev.adap.tv/Jason/DosEquisItalianCountryside.mp4"></source>
                 </video>
                 <div id="adslot">

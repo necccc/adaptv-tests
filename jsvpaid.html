@@ -44,6 +44,8 @@
                  */
                 var environmentVars = {
                     maxWrapperLevels : 5,
+                    adTagTimeout        : 200,
+                    videoTimeout        : 200,
                     videoSlot        : document.getElementById('content'), // Required
                     slot             : document.getElementById('adslot'), // Required
                     clickSlot        : document.getElementById('clicktracker') // optional
@@ -131,6 +133,7 @@
                     console.log('Ad Loaded');
                     // This is commented out because autostart is not supported on mobile devices and must be started via a user action(click)
                     //adaptvVPAIDAd.startAd();
+                    adaptvVPAIDAd.resumeAd();
                 });
                 adaptvVPAIDAd.subscribe('AdStarted', function(e) { console.log('Ad Started'); isPlaying = true; });
                 adaptvVPAIDAd.subscribe('AdPaused', function(e) { console.log('Ad Paused'); isPlaying = false; });
@@ -181,20 +184,25 @@
                 */
                 // console.log('Ad has ' + adaptvVPAIDAd.getAdRemainingTime() + ' secs left.);
 
-adaptvVPAIDAd.initAd(640, 360, -1, -1, creativeData, environmentVars);
 
-                var loadControl = document.getElementById('loadad');
-                loadControl.addEventListener('click', function(e) {
-                  
-                 });
+
+
+                document.getElementById('content').addEventListener('play', initAdvert);
+
+                function initAdvert (e) {
+                    document.getElementById('content').removeEventListener('play', initAdvert);
+                    document.getElementById('content').pause();
+                    adaptvVPAIDAd.initAd(640, 360, -1, -1, creativeData, environmentVars);
+                }
 
                 /*
                  * basic implementation of resume/play button
                  */
                  var videoControl = document.getElementById('control');
                  videoControl.addEventListener('click', function(e) {
-                    isPlaying ? adaptvVPAIDAd.pauseAd() : adaptvVPAIDAd.resumeAd();
-                    isPlaying = !isPlaying;
+                     document.getElementById('content').play();
+                     //isPlaying ? adaptvVPAIDAd.pauseAd() : adaptvVPAIDAd.resumeAd();
+                    //isPlaying = !isPlaying;
                  });
             }
 
@@ -247,21 +255,26 @@ adaptvVPAIDAd.initAd(640, 360, -1, -1, creativeData, environmentVars);
                 height: 100px;
                 width: 480px;
                 margin: 0px auto;
-            }            
+            }
+
+
+            #ADAPTV_HTML5_IFRAME {
+                border: 3px solid red !important;
+            }
         </style>
     </head>
 
     <body onload="onBodyLoad()">
         <div id="wrapper">
             <div id="container">
-                <video id="content">
+                <video id="content" poster="http://automotor.hu/lapokkepek/cikkek/213000/213556_911index.jpg    ">
                     <source src="http://dev.adap.tv/Jason/DosEquisItalianCountryside.mp4"></source>
                 </video>
                 <div id="adslot">
                 </slot>
             </div>
         </div>
-        <div id="loadad">load ad</div>
+
         <div id="control">Play/Pause</div>
         <div id="clicktracker">clickslot</div>
 
