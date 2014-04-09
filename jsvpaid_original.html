@@ -130,14 +130,14 @@
                 * below is a simple example of adding listeners
                 */
                 adaptvVPAIDAd.subscribe('AdLoaded', function() {
-                    console.log('Ad Loaded');
+                    log('Ad Loaded');
                     // This is commented out because autostart is not supported on mobile devices and must be started via a user action(click)
                     // adaptvVPAIDAd.startAd();
                 });
-                adaptvVPAIDAd.subscribe('AdStarted', function(e) { console.log('Ad Started'); isPlaying = true; });
-                adaptvVPAIDAd.subscribe('AdPaused', function(e) { console.log('Ad Paused'); isPlaying = false; });
-                adaptvVPAIDAd.subscribe('AdStopped', function() { console.log('Ad Stopped.'); });
-                adaptvVPAIDAd.subscribe('AdError', function(e) { console.log(e.type + '! Error code: ' + e.data.errorCode + '. Error message: ' + e.data.errorMessage)} );
+                adaptvVPAIDAd.subscribe('AdStarted', function(e) { log('Ad Started'); isPlaying = true; });
+                adaptvVPAIDAd.subscribe('AdPaused', function(e) { log('Ad Paused'); isPlaying = false; });
+                adaptvVPAIDAd.subscribe('AdStopped', function() { log('Ad Stopped.'); });
+                adaptvVPAIDAd.subscribe('AdError', function(e) { log(e.type + '! Error code: ' + e.data.errorCode + '. Error message: ' + e.data.errorMessage)} );
 
                 /**
                 * Initiate video ad call
@@ -191,6 +191,14 @@
                     isPlaying ? adaptvVPAIDAd.pauseAd() : adaptvVPAIDAd.resumeAd();
                     isPlaying = !isPlaying;
                  });
+            }
+
+            function __log (msg) {
+
+                var logger = document.getElementById('log')
+
+                logger.innerHTML = msg + '<br />' + logger.innerHTML;
+                console.log(msg);
             }
 
         </script>
@@ -253,5 +261,6 @@
         </div>
         <div id="control">Play/Pause</div>
         <div id="clicktracker">clickslot</div>
+        <div id="log"></div>
     </body>
 </html>
