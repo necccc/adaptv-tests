@@ -12,6 +12,19 @@
              * or CMS, if desired.
              */
 
+
+
+            if (window.attachEvent) {
+                window.attachEvent('onmessage', messageHandler);
+            } else {
+                window.addEventListener('message', messageHandler, true);
+            }
+
+
+            function messageHandler (e) {
+                console.log(' message event received ', e.origin, e.data);
+            }
+
             var onBodyLoad = function() {
                 /**
                  * SDK environmentVars. The below environmentVars are all that are available currently.
@@ -55,7 +68,8 @@
                 /**
                  * Adap.tv provided unique publisher key. It can be used to construct your Adap.tv ad-tag
                  */
-                var url = "http://ads.adap.tv/a/t/keithsandbox";
+                var url = "http://ds.adap.tv/a/t/keithsandbox";
+              //  var url = "http://ads.adap.tv/a/t/ustreamtv";
 
                 /**
                  * ad-tag downloaded from Adap.tv console can also be used.
