@@ -55,7 +55,8 @@ var onBodyLoad = function() {
     /**
      * Adap.tv provided unique publisher key. It can be used to construct your Adap.tv ad-tag
      */
-    var url = "https://ads.adap.tv/a/t/keithsandbox";
+    //var url = "https://ads.adap.tv/a/t/keithsandbox";
+    var url = "https://ads.adap.tv/a/t/ustreamtv";
 
     /**
      * ad-tag downloaded from Adap.tv console can also be used.
@@ -71,16 +72,16 @@ var onBodyLoad = function() {
     /**
      * Page URL, either full URL or just domain.com.
      */
-    params.pageUrl = "https://www.mefeedia.com/";
+    params.pageUrl = "https://www.ustream.tv/embed/recorded/43720950";
 
     /**
      * Below is a complete list of Adap.tv native keys to send targeting and meta data,
      * along with placeholders.
      */
     params.id = "[VIDEO_ID]";                   // Video id
-    params.title = "[VIDEO_TITLE]";             // Video title
-    params.description = "[VIDEO_DESCRPTION]";  // Video description
-    params.duration = "[VIDEO_DURATION]";       // Video duration
+    params.title = "_nec recorded live on 2014.02.12. at 16:41 CET";             // Video title
+    params.description = "_nec recorded live on 2014.02.12. at 16:41 CET";  // Video description
+    params.duration = "439";       // Video duration
     // params.keywords = "[VIDEO_KEYWORDS]";       // Video keywords, comma-separated
     params.keywords = "ios6";                   // dummy example value
     params.categories = "[CATEGORIES]";         // Categories, comma-separated
