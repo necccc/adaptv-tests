@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>webworker playground</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+
+    <script type="application/javascript" src="http://release-1145-tags-static.dev.ustream.tv/js/libs/umsclient.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/threejs/r69/three.min.js"></script>
+</head>
+<body>
+<script type="application/javascript">
+
+
+
+
+
+
+
+    /*
+
+
+     var uw = new UmsWorker({
+     params: '1'
+     });
+
+     uw.addEventListener('reject')
+     uw.addEventListener('moduleinfo')
+     uw.addEventListener('accept')
+     uw.addEventListener('log')
+
+     uw.mediaId
+
+     uw.connect()
+     uw.send()
+     uw.close()
+     uw.destroy()
+
+
+     */
+
+
+    var uw = new UmsWorker({
+        app: 'channel',
+        media: 1524,
+//	id: 19563781,
+        referrer: 'unknown',
+        useWorker: true
+//	longpoll: true
+    });
+
+    uw.addEventListener('reject', function (data) {
+        console.log('REJECT', data );
+    });
+
+    uw.addEventListener('update', function (data) {
+        console.log('UPDATE', data );
+    });
+
+    uw.connect();
+</script>
+</body>
+</html>
