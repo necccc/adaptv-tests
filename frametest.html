@@ -12,8 +12,11 @@
 
     if (location.ancestorOrigins) {
 
+        console.group('ancestorOrigins')
+        console.log(location.ancestorOrigins);
         console.log(location.ancestorOrigins[0]);
-
+        console.log(location.ancestorOrigins[location.ancestorOrigins.length - 1]);
+        console.groupEnd();
     }
 
 
