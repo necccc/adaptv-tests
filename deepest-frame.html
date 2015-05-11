@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>frametest playground</title>
+
+</head>
+<body>
+
+<h3>Teszt</h3>
+
+<script type="application/javascript">
+
+
+    function topRedirect () {
+
+        var url = '';
+        window.top.location.href = url + '?ref=' + location.href;
+    }
+
+    (function () {
+        var multiLevelReferrer = 'multilevel_embed',
+            unknown = 'unknown',
+            topOrigin = multiLevelReferrer,
+            parent = window.parent;
+
+        if (location.ancestorOrigins) {
+            topOrigin = location.ancestorOrigins[location.ancestorOrigins.length - 1];
+        } else {
+            topOrigin = multiLevelReferrer + ':' + document.referrer;
+        }
+        if (parent !== window.top) {
+
+            try {
+
+                if (parent.location.host == location.host) {
+
+                    if (parent.multiLevelEmbed) {
+                        return;
+                    }
+
+                    return;
+                }
+
+                topRedirect()
+
+            } catch (e) {
+
+                topRedirect()
+
+            }
+
+        } else if (parent === window && location.pathname.indexOf('/embed') !== 0) {
+            // channel page
+            return;
+        }
+
+    })();
+
+</script>
+</body>
+</html>
